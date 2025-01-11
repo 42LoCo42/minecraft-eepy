@@ -1,0 +1,47 @@
+* eepy
+Make your Minecraft server very eepy!
+
+Every few seconds, it checks if no players are online
+and stops the server using [[https://en.wikipedia.org/w/index.php?title=SIGSTOP][SIGSTOP]] if that's the case.
+
+This mod is for Minecraft 1.20.1
+
+** Build
+Make sure you have Java 17 installed, then run
+#+begin_src sh
+  ./gradlew build
+#+end_src
+The jar will be created in =build/libs=.
+
+Or simply download the mod from the [[https://github.com/42LoCo42/minecraft-eepy/releases/latest][latest release]]!
+
+** Install
+Add the mod *on the server side*. It is not required on the client.
+
+Then, set up a port knocking daemon like [[https://github.com/jvinet/knock/][this one]] (with example [[file:knockd.ini][config]])
+to resume the server if someone wants to connect.
+#+begin_src sh
+  # Replace eth0 with your external network interface!
+  # If your server is reachable from multiple interfaces,
+  # run multiple instances of knockd.
+  sudo knockd -c knockd.ini -i eth0
+#+end_src
+
+** Config
+This mod uses the config file =eepy-common.toml=
+containing the following fields & defaults:
+#+begin_src toml
+  # Number of seconds to delay between checks
+  # Range: 1 ~ 9223372036854775807
+  delaySeconds = 60
+
+  # If a check happens less than X seconds after a player login attempt, it's skipped
+  # Range: 1 ~ 9223372036854775807
+  afterLoginSeconds = 60
+
+  # If a check happens more than X seconds after its scheduled time, it's skipped
+  # Range: 1 ~ 9223372036854775807
+  afterDeadlineSeconds = 1
+#+end_src
+The file will be automatically generated when the mod loads
+and can be changed without needing to restart the server.
